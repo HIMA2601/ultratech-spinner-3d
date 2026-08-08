@@ -34,6 +34,7 @@
 </style>
 <style>
   /* Himalaya International branding */
+  #note{display:none !important}
   header{align-items:center !important}
   header .brand{background:#fff;border-radius:10px;padding:6px 11px;display:flex;align-items:center;flex:0 0 auto}
   header .brand img{height:46px;width:auto;display:block}
@@ -175,7 +176,7 @@ function tex(b64){
   const t=new THREE.Texture(); const img=new Image();
   img.onload=()=>{t.image=img;t.needsUpdate=true;};
   img.src='data:image/jpeg;base64,'+b64;
-  t.encoding=THREE.sRGBEncoding; t.anisotropy=8; return t;
+  t.encoding=THREE.sRGBEncoding; t.anisotropy=16; return t;
 }
 
 let unit=null, spinner=null;
@@ -288,7 +289,7 @@ setTimeout(()=>document.getElementById('hint').style.opacity=0,4000);
 
 function resize(){
   const w=stage.clientWidth,h=stage.clientHeight;
-  renderer.setSize(w,h); renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(w,h); renderer.setPixelRatio(Math.min(devicePixelRatio,3));
   cam.aspect=w/h; cam.updateProjectionMatrix();
 }
 addEventListener('resize',resize); resize();
