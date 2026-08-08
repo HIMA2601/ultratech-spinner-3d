@@ -35,6 +35,7 @@
 <style>
   /* Himalaya International branding */
   #note{display:none !important}
+  #orbitBtn,#hint{display:none !important}
   #modeCounter,#modeFlange,#hud>span[style]{display:none !important}
   header{align-items:center !important}
   header .brand{background:#fff;border-radius:10px;padding:6px 11px;display:flex;align-items:center;flex:0 0 auto}
@@ -43,8 +44,14 @@
   header .by{margin-left:auto;color:var(--dim);font-size:12px;text-align:right;line-height:1.35}
   header .by b{color:var(--ink);font-weight:600;display:block;font-size:12.5px;letter-spacing:.2px}
   @media(max-width:640px){
-    header .brand img{height:36px}
-    header .by{margin-left:0;text-align:left;width:100%}
+    header{padding:8px 12px 6px;gap:8px}
+    header h1{font-size:13.5px}
+    header .sub{font-size:10.5px}
+    header .brand{padding:4px 7px;border-radius:8px}
+    header .brand img{height:28px}
+    header .by{display:none}
+    #chips{padding:7px 12px}
+    #hud{left:10px;bottom:10px;right:10px;flex-wrap:wrap;padding:7px 10px}
   }
 </style>
 </head>
@@ -90,14 +97,12 @@ const OUTLINE = [[0.3728, 1.0018], [0.3728, 0.9903], [0.3728, 0.9788], [0.3728, 
 
 // ---------- minimal orbit controls ----------
 function SimpleOrbit(cam, dom){
-  let theta=0.35, phi=1.35, dist=26, tgt=new THREE.Vector3(0,7,0);
+  let theta=0.25, phi=1.42, dist=(Math.min(innerWidth,innerHeight)<640?44:32), tgt=new THREE.Vector3(0,7.5,0);
   let drag=false, px=0, py=0; this.auto=false;
   const apply=()=>{ phi=Math.max(0.25,Math.min(2.6,phi)); dist=Math.max(12,Math.min(60,dist));
     cam.position.set(tgt.x+dist*Math.sin(phi)*Math.sin(theta), tgt.y+dist*Math.cos(phi), tgt.z+dist*Math.sin(phi)*Math.cos(theta));
     cam.lookAt(tgt); };
-  dom.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;dom.setPointerCapture(e.pointerId);});
-  dom.addEventListener('pointermove',e=>{ if(!drag)return; theta-=(e.clientX-px)*0.008; phi-=(e.clientY-py)*0.008; px=e.clientX;py=e.clientY; apply();});
-  dom.addEventListener('pointerup',()=>drag=false);
+  // drag-to-orbit disabled — fixed view, card spins on its own
   dom.addEventListener('wheel',e=>{e.preventDefault(); dist+=e.deltaY*0.02; apply();},{passive:false});
   this.tick=(dt)=>{ if(this.auto&&!drag){theta+=dt*0.15; apply();} };
   this.zoom=(d)=>{ dist+=d; apply(); };
@@ -117,7 +122,7 @@ const scene=new THREE.Scene();
   g.fillStyle=gr; g.fillRect(0,0,16,512);
   const bt=new THREE.CanvasTexture(c); bt.encoding=THREE.sRGBEncoding; scene.background=bt; })();
 scene.fog=new THREE.Fog(0x0d0c11,48,95);
-const cam=new THREE.PerspectiveCamera(38,1,0.1,200);
+const cam=new THREE.PerspectiveCamera(38,1,1,200);
 const orbit=new SimpleOrbit(cam,renderer.domElement);
 
 scene.add(new THREE.AmbientLight(0xffffff,0.55));
