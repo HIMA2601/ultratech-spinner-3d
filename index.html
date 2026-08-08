@@ -68,6 +68,8 @@
       <button id="spinBtn" class="on">Spin: on</button>
       <label>Speed</label><input id="speed" type="range" min="0.2" max="4" step="0.1" value="1.4">
       <button id="orbitBtn">Auto-orbit</button>
+      <button id="zoomIn">Zoom +</button>
+      <button id="zoomOut">Zoom &minus;</button>
     </div>
     <div id="note"></div>
   </div>
@@ -98,6 +100,7 @@ function SimpleOrbit(cam, dom){
   dom.addEventListener('pointerup',()=>drag=false);
   dom.addEventListener('wheel',e=>{e.preventDefault(); dist+=e.deltaY*0.02; apply();},{passive:false});
   this.tick=(dt)=>{ if(this.auto&&!drag){theta+=dt*0.15; apply();} };
+  this.zoom=(d)=>{ dist+=d; apply(); };
   apply();
 }
 
@@ -286,6 +289,8 @@ const spinBtn=document.getElementById('spinBtn'), orbitBtn=document.getElementBy
 spinBtn.onclick=()=>{spinning=!spinning; spinBtn.classList.toggle('on',spinning); spinBtn.textContent='Spin: '+(spinning?'on':'off');};
 document.getElementById('speed').oninput=e=>speed=parseFloat(e.target.value);
 orbitBtn.onclick=()=>{orbit.auto=!orbit.auto; orbitBtn.classList.toggle('on',orbit.auto);};
+document.getElementById('zoomIn').onclick=()=>orbit.zoom(-5);
+document.getElementById('zoomOut').onclick=()=>orbit.zoom(5);
 setTimeout(()=>document.getElementById('hint').style.opacity=0,4000);
 
 function resize(){
