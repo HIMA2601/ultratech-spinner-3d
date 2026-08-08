@@ -21,7 +21,7 @@
   .chip:hover{color:var(--ink);border-color:#3d3d49}
   .chip.on{background:var(--accent);border-color:var(--accent);color:#1a1408;font-weight:600}
   #stage{position:relative;flex:1;min-height:0}
-  canvas{display:block}
+  canvas{display:block;touch-action:none}
   #hud{position:absolute;left:16px;bottom:16px;display:flex;gap:8px;align-items:center;background:rgba(23,23,29,.85);border:1px solid var(--line);border-radius:12px;padding:8px 12px;backdrop-filter:blur(6px)}
   #hud button{background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 12px;cursor:pointer;font-size:12.5px}
   #hud button.on{border-color:var(--accent);color:var(--accent)}
@@ -102,7 +102,9 @@ function SimpleOrbit(cam, dom){
   const apply=()=>{ phi=Math.max(0.25,Math.min(2.6,phi)); dist=Math.max(12,Math.min(60,dist));
     cam.position.set(tgt.x+dist*Math.sin(phi)*Math.sin(theta), tgt.y+dist*Math.cos(phi), tgt.z+dist*Math.sin(phi)*Math.cos(theta));
     cam.lookAt(tgt); };
-  // drag-to-orbit disabled — fixed view, card spins on its own
+  dom.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;dom.setPointerCapture(e.pointerId);});
+  dom.addEventListener('pointermove',e=>{ if(!drag)return; theta-=(e.clientX-px)*0.008; px=e.clientX; apply();});
+  dom.addEventListener('pointerup',()=>drag=false);
   dom.addEventListener('wheel',e=>{e.preventDefault(); dist+=e.deltaY*0.02; apply();},{passive:false});
   this.tick=(dt)=>{ if(this.auto&&!drag){theta+=dt*0.15; apply();} };
   this.zoom=(d)=>{ dist+=d; apply(); };
