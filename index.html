@@ -54,6 +54,11 @@
     #hud{left:10px;bottom:10px;right:10px;flex-wrap:wrap;padding:7px 10px}
   }
 </style>
+<style>
+  .altlink{position:absolute;top:14px;right:16px;z-index:5;background:rgba(23,23,29,.88);border:1px solid var(--accent);color:var(--accent);padding:7px 14px;border-radius:999px;font-size:12.5px;text-decoration:none}
+  .altlink:hover{background:var(--accent);color:#1a1408}
+  @media(max-width:640px){.altlink{top:10px;right:10px}}
+</style>
 </head>
 <body>
 <div id="app">
@@ -67,6 +72,7 @@
   </header>
   <div id="chips"></div>
   <div id="stage">
+    <a class="altlink" href="triple.html">32&quot; Triple Bag Spinner &rarr;</a>
     <div id="hint">Drag to orbit &middot; scroll to zoom</div>
     <div id="hud">
       <button id="modeCounter" class="on">Counter Unit</button>
